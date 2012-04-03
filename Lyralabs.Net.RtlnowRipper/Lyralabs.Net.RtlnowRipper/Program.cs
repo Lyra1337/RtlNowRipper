@@ -41,6 +41,10 @@ namespace Lyralabs.Net.RtlnowRipper
       }
       else
       {
+        Crawler crawler = new Crawler("http://rtl2now.rtl2.de/berlin-tag-nacht.php");
+        crawler.Start();
+
+
         Stopwatch sw = new Stopwatch();
         sw.Start();
         Ripper ripper = new Ripper("http://rtl2now.rtl2.de/berlin-tag-nacht/berlin-tag-nacht-folge-141.php?container_id=82189&player=1&season=2");
