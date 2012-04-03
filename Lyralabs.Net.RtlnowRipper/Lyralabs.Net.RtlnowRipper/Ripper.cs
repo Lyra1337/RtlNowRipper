@@ -15,7 +15,7 @@ namespace Lyralabs.Net.RtlnowRipper
   class Ripper
   {
     private static readonly Regex urlParser = new Regex("data:'(?<url>(%2Flogic%2Fgenerate_film_xml08.php[^']+))',", RegexOptions.Compiled);
-    private static readonly Regex rtmpeUriParser = new Regex("rtmpe://fms-fra[0-9]{,2}\\.rtl\\.de/rtl2now/(?<mp4path>(.+))", RegexOptions.Compiled);
+    private static readonly Regex rtmpeUriParser = new Regex("rtmpe://fms-fra[0-9]*\\.rtl\\.de/rtl2now/(?<mp4path>(.+))", RegexOptions.Compiled);
 
     public string Url { get; set; }
     public string Rtmpe { get; set; }
