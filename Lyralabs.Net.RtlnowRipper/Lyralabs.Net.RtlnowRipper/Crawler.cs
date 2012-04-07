@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
 using System.Web;
 
 namespace Lyralabs.Net.RtlnowRipper
 {
-  class Crawler
+  public class Crawler
   {
     private static readonly Regex episodeParser = new Regex("<a href=\"(?<url>(/berlin-tag-nacht/[^\\\"]*))\" title=\"Berlin - Tag &amp; Nacht[^\\\"]*\">(?<name>([^<]+))</a>", RegexOptions.Compiled);
 

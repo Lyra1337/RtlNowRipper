@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Net;
 using System.Diagnostics;
-using System.Xml.Linq;
-using System.Xml;
-using System.Threading;
 using System.IO;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Xml;
 
 namespace Lyralabs.Net.RtlnowRipper
 {
-  class Ripper
+  public class Ripper
   {
+    private static readonly string FFMPEG_PATH = Environment.OSVersion.Platform == PlatformID.Unix ? "ffmpeg" : "lib/ffmpeg.exe";
+    private static readonly string RTMPDUMP_PATH = Environment.OSVersion.Platform == PlatformID.Unix ? "rtmpdump" : "lib/rtmpdump.exe";
+
     private static readonly Regex urlParser = new Regex("data:'(?<url>(%2Flogic%2Fgenerate_film_xml08.php[^']+))',", RegexOptions.Compiled);
     private static readonly Regex rtmpeUriParser = new Regex("rtmpe://fms-fra[0-9]*\\.rtl\\.de/rtl2now/(?<mp4path>(.+))", RegexOptions.Compiled);
 
@@ -46,19 +45,17 @@ namespace Lyralabs.Net.RtlnowRipper
 
         if (node == null)
         {
-          Console.WriteLine("ERR <<<< Node is null");
+          Console.WriteLine("ERROR <<<< Node 'filename' is null");
           return false;
         }
 
         this.Rtmpe = node.InnerText;
 
-        Debug.Write(String.Concat("RTMPE-URL:\n\t", this.Rtmpe, "\n"));
-
         return true;
       }
       else
       {
-        Console.WriteLine("ERR <<<< Regex failed");
+        Console.WriteLine("ERROR <<<< Regex failed");
         return false;
       }
     }
@@ -76,7 +73,7 @@ namespace Lyralabs.Net.RtlnowRipper
 
       string rtmpdump = String.Concat("-r \"rtmpe://fms-fra18.rtl.de:1935/rtl2now/\" -q -a \"rtl2now/\" -f \"WIN 11,1,102,63\" -W \"http://rtl2now.rtl2.de/includes/vodplayer.swf\" -p \"http://rtl2now.rtl2.de/berlin-tag-nacht/berlin-tag-nacht-folge-140.php?container_id=81971&player=1&season=2\" -y \"", y, "\" -o \"", filename, "\"");
 
-      ProcessStartInfo psi = new ProcessStartInfo("rtmpdump", rtmpdump);
+      ProcessStartInfo psi = new ProcessStartInfo(Ripper.RTMPDUMP_PATH, rtmpdump);
       //psi.UseShellExecute = false;
       //psi.RedirectStandardOutput = true;
       //psi.RedirectStandardInput = true;
