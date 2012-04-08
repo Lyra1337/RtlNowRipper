@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.IO;
 
 namespace Lyralabs.Net.RtlnowRipper
 {
@@ -31,6 +32,37 @@ namespace Lyralabs.Net.RtlnowRipper
           string name = HttpUtility.HtmlDecode(m.Groups["name"].Value);
           string url = HttpUtility.HtmlDecode(m.Groups["url"].Value);
           Console.WriteLine(name);
+
+          Query insert = new Query("INSERT INTO `video` (`guid`, `url`, `name`, `added`) VALUES (?guid, ?url, ?name, UNIX_TIMESTAMP());");
+          string guid = Guid.NewGuid().ToString();
+          insert.Add("?guid", guid);
+          insert.Add("?url", url);
+          insert.Add("?name", name);
+          insert.Execute();
+          Console.WriteLine("ripping {0}", name);
+          Ripper ripper = new Ripper(url);
+
+          if (ripper.Prepare())
+          {
+            Console.WriteLine("prepare succeeded");
+            string filename = ripper.Download("files");
+            if (filename != null)
+            {
+              Console.WriteLine("download succeeded");
+              File.Move(filename, String.Concat("files/", guid, ".flv"));
+              Console.WriteLine("file saved: files/{0}.flv", guid);
+            }
+            else
+            {
+              Console.WriteLine("download failed");
+            }
+          }
+          else
+          {
+            Console.WriteLine("prepare failed");
+          }
+
+          Console.WriteLine("\ncontinuing with next match...\n");
         }
       }
     }

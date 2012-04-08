@@ -27,7 +27,7 @@ namespace Lyralabs.Net.RtlnowRipper
         Console.Write(" > Downloading Stream...");
         Stopwatch sw = new Stopwatch();
         sw.Start();
-        string filename = ripper.Download();
+        string filename = ripper.Download("files");
         sw.Stop();
         double seconds = sw.Elapsed.TotalSeconds;
         WriteColored(" success", ConsoleColor.Green);
@@ -41,6 +41,7 @@ namespace Lyralabs.Net.RtlnowRipper
         Crawler crawler = new Crawler("http://rtl2now.rtl2.de/berlin-tag-nacht.php");
         crawler.Start();
 
+        Console.ReadKey();
 
         Stopwatch sw = new Stopwatch();
         sw.Start();
@@ -50,7 +51,7 @@ namespace Lyralabs.Net.RtlnowRipper
 
         Console.Write("Took {0} ms", sw.ElapsedMilliseconds);
 
-        ripper.Download();
+        ripper.Download("files");
 
         Console.ReadKey();
       }

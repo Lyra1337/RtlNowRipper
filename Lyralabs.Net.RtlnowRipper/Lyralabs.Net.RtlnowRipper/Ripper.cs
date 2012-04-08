@@ -10,8 +10,8 @@ namespace Lyralabs.Net.RtlnowRipper
 {
   public class Ripper
   {
-    private static readonly string FFMPEG_PATH = Environment.OSVersion.Platform == PlatformID.Unix ? "ffmpeg" : "lib/ffmpeg.exe";
-    private static readonly string RTMPDUMP_PATH = Environment.OSVersion.Platform == PlatformID.Unix ? "rtmpdump" : "lib/rtmpdump.exe";
+    private static readonly string FFMPEG_PATH = Environment.OSVersion.Platform == PlatformID.Unix ? "ffmpeg" : "lib\\ffmpeg.exe";
+    private static readonly string RTMPDUMP_PATH = Environment.OSVersion.Platform == PlatformID.Unix ? "rtmpdump" : "lib\\rtmpdump.exe";
 
     private static readonly Regex urlParser = new Regex("data:'(?<url>(%2Flogic%2Fgenerate_film_xml08.php[^']+))',", RegexOptions.Compiled);
     private static readonly Regex rtmpeUriParser = new Regex("rtmpe://fms-fra[0-9]*\\.rtl\\.de/rtl2now/(?<mp4path>(.+))", RegexOptions.Compiled);
@@ -21,7 +21,14 @@ namespace Lyralabs.Net.RtlnowRipper
 
     public Ripper(string url)
     {
-      this.Url = url;
+      if (url.StartsWith("/"))
+      {
+        this.Url = String.Concat("http://rtl2now.rtl2.de", url);
+      }
+      else
+      {
+        this.Url = url;
+      }
     }
 
     public bool Prepare()
@@ -60,14 +67,14 @@ namespace Lyralabs.Net.RtlnowRipper
       }
     }
 
-    public string Download()
+    public string Download(string directory)
     {
       if (Directory.Exists("files") == false)
       {
         Directory.CreateDirectory("files");
       }
 
-      string filename = String.Concat("files/", Guid.NewGuid().ToString(), ".flv");
+      string filename = String.Concat(directory, "/", Guid.NewGuid().ToString(), ".flv");
 
       string y = this.ParsePlaypath();
 
