@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="List.aspx.cs" Inherits="Lyralabs.Net.RtlnowInstantView.List" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Lyralabs.Net.RtlnowInstantView.Default" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -8,6 +8,7 @@
 <body>
   <form id="form1" runat="server">
   <div>
+    <asp:Table runat="server" ID="table" />
   </div>
   </form>
 </body>

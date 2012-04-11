@@ -10,7 +10,7 @@
 namespace Lyralabs.Net.RtlnowInstantView {
     
     
-    public partial class List {
+    public partial class Default {
         
         /// <summary>
         /// form1-Steuerelement
@@ -20,5 +20,14 @@ namespace Lyralabs.Net.RtlnowInstantView {
         /// Um dies zu ändern, verschieben Sie die Felddeklaration aus der Designerdatei in eine Code-Behind-Datei.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        
+        /// <summary>
+        /// table-Steuerelement
+        /// </summary>
+        /// <remarks>
+        /// Automatisch generiertes Feld
+        /// Um dies zu ändern, verschieben Sie die Felddeklaration aus der Designerdatei in eine Code-Behind-Datei.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Table table;
     }
 }

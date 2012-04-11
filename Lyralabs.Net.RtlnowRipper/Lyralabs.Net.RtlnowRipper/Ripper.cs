@@ -16,11 +16,14 @@ namespace Lyralabs.Net.RtlnowRipper
     private static readonly Regex urlParser = new Regex("data:'(?<url>(%2Flogic%2Fgenerate_film_xml08.php[^']+))',", RegexOptions.Compiled);
     private static readonly Regex rtmpeUriParser = new Regex("rtmpe://fms-fra[0-9]*\\.rtl\\.de/rtl2now/(?<mp4path>(.+))", RegexOptions.Compiled);
 
+    private TextWriter output = null;
+
     public string Url { get; set; }
     public string Rtmpe { get; set; }
 
-    public Ripper(string url)
+    public Ripper(string url, TextWriter log)
     {
+      this.output = log;
       if (url.StartsWith("/"))
       {
         this.Url = String.Concat("http://rtl2now.rtl2.de", url);
@@ -41,8 +44,6 @@ namespace Lyralabs.Net.RtlnowRipper
       {
         string apiUrl = String.Concat("http://rtl2now.rtl2.de", Uri.UnescapeDataString(match.Groups["url"].Value));
 
-        Debug.Write(String.Concat("API-URL:\n\t", apiUrl, "\n"));
-
         string xml = client.DownloadString(apiUrl);
 
         XmlDocument doc = new XmlDocument();
@@ -52,7 +53,7 @@ namespace Lyralabs.Net.RtlnowRipper
 
         if (node == null)
         {
-          Console.WriteLine("ERROR <<<< Node 'filename' is null");
+          this.output.WriteLine("ERROR <<<< Node 'filename' is null");
           return false;
         }
 
@@ -62,7 +63,7 @@ namespace Lyralabs.Net.RtlnowRipper
       }
       else
       {
-        Console.WriteLine("ERROR <<<< Regex failed");
+        this.output.WriteLine("ERROR <<<< Regex failed");
         return false;
       }
     }
