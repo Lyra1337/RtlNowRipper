@@ -11,7 +11,7 @@ namespace Lyralabs.Net.RtlnowRipper
       if (args.Length == 1)
       {
         Console.WriteLine("   --  RTL2NOW Ripper  --");
-        Ripper ripper = new Ripper(args[0]);
+        Ripper ripper = new Ripper(args[0], Console.Out);
         Console.Write(" > Prepare Stream...");
         if (ripper.Prepare())
         {
@@ -38,14 +38,14 @@ namespace Lyralabs.Net.RtlnowRipper
       }
       else
       {
-        Crawler crawler = new Crawler("http://rtl2now.rtl2.de/berlin-tag-nacht.php");
+        Crawler crawler = new Crawler("http://rtl2now.rtl2.de/berlin-tag-nacht.php", Console.Out);
         crawler.Start();
 
         Console.ReadKey();
 
         Stopwatch sw = new Stopwatch();
         sw.Start();
-        Ripper ripper = new Ripper("http://rtl2now.rtl2.de/berlin-tag-nacht/berlin-tag-nacht-folge-141.php?container_id=82189&player=1&season=2");
+        Ripper ripper = new Ripper("http://rtl2now.rtl2.de/berlin-tag-nacht/berlin-tag-nacht-folge-141.php?container_id=82189&player=1&season=2", Console.Out);
         ripper.Prepare();
         sw.Stop();
 

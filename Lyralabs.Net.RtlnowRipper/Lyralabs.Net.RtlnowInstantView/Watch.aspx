@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Startseite" Language="C#" AutoEventWireup="true" CodeBehind="Watch.aspx.cs" Inherits="Lyralabs.Net.RtlnowInstantView._Default" %>
+﻿<%@ Page Title="Startseite" Language="C#" AutoEventWireup="true" CodeBehind="Watch.aspx.cs" Inherits="Lyralabs.Net.RtlnowInstantView.Watch" %>
 
 <!DOCTYPE html>
 <html>
@@ -14,7 +14,7 @@
     <script lang="javascript">
       flashembed('player', 'http://releases.flowplayer.org/swf/flowplayer-3.2.8.swf', {
         config: {
-          clip: 'http://lyra.bz/<%=System.Web.HttpUtility.HtmlEncode(Context.Request.QueryString["v"]) %>.flv',
+          clip: 'http://btn.lyra.bz/files/<%=HttpUtility.HtmlEncode(Context.Request.QueryString["v"]) %>.flv',
           plugins: {
             controlbar: null
           }

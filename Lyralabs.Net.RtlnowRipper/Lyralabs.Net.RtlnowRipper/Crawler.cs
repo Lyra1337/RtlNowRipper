@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.IO;
@@ -9,12 +10,14 @@ namespace Lyralabs.Net.RtlnowRipper
   public class Crawler
   {
     private static readonly Regex episodeParser = new Regex("<a href=\"(?<url>(/berlin-tag-nacht/[^\\\"]*))\" title=\"Berlin - Tag &amp; Nacht[^\\\"]*\">(?<name>([^<]+))</a>", RegexOptions.Compiled);
+    private TextWriter output = null;
 
     public string Url { get; set; }
 
-    public Crawler(string url)
+    public Crawler(string url, TextWriter log)
     {
       this.Url = url;
+      this.output = log;
     }
 
     public void Start()
@@ -31,38 +34,49 @@ namespace Lyralabs.Net.RtlnowRipper
         {
           string name = HttpUtility.HtmlDecode(m.Groups["name"].Value);
           string url = HttpUtility.HtmlDecode(m.Groups["url"].Value);
-          Console.WriteLine(name);
+          this.output.WriteLine(name);
 
-          Query insert = new Query("INSERT INTO `video` (`guid`, `url`, `name`, `added`) VALUES (?guid, ?url, ?name, UNIX_TIMESTAMP());");
-          string guid = Guid.NewGuid().ToString();
-          insert.Add("?guid", guid);
-          insert.Add("?url", url);
-          insert.Add("?name", name);
-          insert.Execute();
-          Console.WriteLine("ripping {0}", name);
-          Ripper ripper = new Ripper(url);
-
-          if (ripper.Prepare())
+          Query select = new Query("SELECT `guid` FROM `video` WHERE `name` = ?name");
+          select.Add("?name", name);
+          List<Dictionary<string, string>> result = select.Execute();
+          if (result == null || result.Count == 0)
           {
-            Console.WriteLine("prepare succeeded");
-            string filename = ripper.Download("files");
-            if (filename != null)
+
+            Query insert = new Query("INSERT INTO `video` (`guid`, `url`, `name`, `added`) VALUES (?guid, ?url, ?name, UNIX_TIMESTAMP());");
+            string guid = Guid.NewGuid().ToString();
+            insert.Add("?guid", guid);
+            insert.Add("?url", url);
+            insert.Add("?name", name);
+            insert.Execute();
+            this.output.WriteLine("ripping {0}", name);
+            Ripper ripper = new Ripper(url, this.output);
+
+            if (ripper.Prepare())
             {
-              Console.WriteLine("download succeeded");
-              File.Move(filename, String.Concat("files/", guid, ".flv"));
-              Console.WriteLine("file saved: files/{0}.flv", guid);
+              this.output.WriteLine("prepare succeeded");
+              string filename = ripper.Download("files");
+              if (filename != null)
+              {
+                this.output.WriteLine("download succeeded");
+                File.Move(filename, String.Concat("files/", guid, ".flv"));
+                this.output.WriteLine("file saved: files/{0}.flv", guid);
+              }
+              else
+              {
+                this.output.WriteLine("download failed");
+              }
             }
             else
             {
-              Console.WriteLine("download failed");
+              this.output.WriteLine("prepare failed");
             }
           }
           else
           {
-            Console.WriteLine("prepare failed");
+            this.output.WriteLine("already exists...");
           }
 
-          Console.WriteLine("\ncontinuing with next match...\n");
+          this.output.WriteLine("\ncontinuing with next match...\n");
         }
       }
     }
