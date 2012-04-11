@@ -88,8 +88,12 @@ namespace Lyralabs.Net.RtlnowRipper
 
       Process downloader = Process.Start(psi);
 
-      while (!downloader.HasExited)
-        Thread.Sleep(100);
+      do
+      {
+        Thread.Sleep(1000);
+      }
+      while (!downloader.HasExited);
+      
 
       return filename;
     }
