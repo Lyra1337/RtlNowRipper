@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Connection.cs" />
     <Compile Include="Crawler.cs" />
-    <Compile Include="List.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query.cs" />
