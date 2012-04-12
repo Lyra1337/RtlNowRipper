@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Lyralabs.Net.RtlnowRipper;
+using System.Configuration;
 
 namespace Lyralabs.Net.RtlnowInstantView
 {
@@ -21,7 +22,7 @@ namespace Lyralabs.Net.RtlnowInstantView
         TableRow row = new TableRow();
         TableCell cell = new TableCell();
         HyperLink link = new HyperLink();
-        link.NavigateUrl = String.Concat("Watch.aspx?v=", video["guid"]);
+        link.NavigateUrl = String.Format(ConfigurationManager.AppSettings["viewerurl"], video["guid"]);
         link.Text = video["name"];
         cell.Controls.Add(link);
         row.Cells.Add(cell);
