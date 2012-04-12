@@ -38,7 +38,7 @@ namespace Lyralabs.Net.RtlnowRipper
       }
       else
       {
-        Crawler crawler = new Crawler("http://rtl2now.rtl2.de/berlin-tag-nacht.php", Console.Out);
+        Crawler crawler = new Crawler("http://rtl2now.rtl2.de/berlin-tag-nacht.php", "files", Console.Out);
         crawler.Start();
 
         Console.ReadKey();

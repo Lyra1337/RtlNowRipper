@@ -13,10 +13,12 @@ namespace Lyralabs.Net.RtlnowRipper
     private TextWriter output = null;
 
     public string Url { get; set; }
+    public string Directory { get; set; }
 
-    public Crawler(string url, TextWriter log)
+    public Crawler(string url, string directory, TextWriter log)
     {
       this.Url = url;
+      this.Directory = directory;
       this.output = log;
     }
 
@@ -41,25 +43,23 @@ namespace Lyralabs.Net.RtlnowRipper
           List<Dictionary<string, string>> result = select.Execute();
           if (result == null || result.Count == 0)
           {
-
-            Query insert = new Query("INSERT INTO `video` (`guid`, `url`, `name`, `added`) VALUES (?guid, ?url, ?name, UNIX_TIMESTAMP());");
-            string guid = Guid.NewGuid().ToString();
-            insert.Add("?guid", guid);
-            insert.Add("?url", url);
-            insert.Add("?name", name);
-            insert.Execute();
             this.output.WriteLine("ripping {0}", name);
             Ripper ripper = new Ripper(url, this.output);
-
+            string guid = Guid.NewGuid().ToString();
             if (ripper.Prepare())
             {
               this.output.WriteLine("prepare succeeded");
-              string filename = ripper.Download("files");
+              string filename = ripper.Download(this.Directory);
               if (filename != null)
               {
                 this.output.WriteLine("download succeeded");
-                File.Move(filename, String.Concat("files/", guid, ".flv"));
-                this.output.WriteLine("file saved: files/{0}.flv", guid);
+                File.Move(filename, String.Concat(this.Directory, "/", guid, ".flv"));
+                this.output.WriteLine("file saved: {0}/{1}.flv", this.Directory, guid);
+                Query insert = new Query("INSERT INTO `video` (`guid`, `url`, `name`, `added`) VALUES (?guid, ?url, ?name, UNIX_TIMESTAMP());");
+                insert.Add("?guid", guid);
+                insert.Add("?url", url);
+                insert.Add("?name", name);
+                insert.Execute();
               }
               else
               {
