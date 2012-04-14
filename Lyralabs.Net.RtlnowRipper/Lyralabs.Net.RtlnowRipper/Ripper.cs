@@ -78,11 +78,13 @@ namespace Lyralabs.Net.RtlnowRipper
         Directory.CreateDirectory(directory);
       }
 
-      string filename = String.Concat(directory, "/", Guid.NewGuid().ToString(), ".flv");
+      string filename = String.Concat(directory, "/dltmp-", Guid.NewGuid().ToString(), ".flv");
 
       string y = this.ParsePlaypath();
 
       string rtmpdump = String.Concat("-r \"rtmpe://fms-fra18.rtl.de:1935/rtl2now/\" -a \"rtl2now/\" -f \"WIN 11,1,102,63\" -W \"http://rtl2now.rtl2.de/includes/vodplayer.swf\" -p \"http://rtl2now.rtl2.de/berlin-tag-nacht/berlin-tag-nacht-folge-140.php?container_id=81971&player=1&season=2\" -y \"", y, "\" -o \"", filename, "\"");
+
+      this.output.WriteLine(rtmpdump);
 
       ProcessStartInfo psi = new ProcessStartInfo(String.Concat(Environment.OSVersion.Platform == PlatformID.Unix ? String.Empty : Thread.GetDomain().BaseDirectory, Ripper.RTMPDUMP_PATH), rtmpdump);
       psi.WorkingDirectory = Environment.OSVersion.Platform == PlatformID.Unix ? String.Empty : Thread.GetDomain().BaseDirectory;

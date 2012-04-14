@@ -53,7 +53,7 @@ namespace Lyralabs.Net.RtlnowRipper
               if (filename != null)
               {
                 this.output.WriteLine("download succeeded");
-                File.Move(filename, String.Concat(this.Directory, "/", guid, ".flv"));
+                File.Copy(filename, String.Concat(this.Directory, "/", guid, ".flv"));
                 this.output.WriteLine("file saved: {0}/{1}.flv", this.Directory, guid);
                 Query insert = new Query("INSERT INTO `video` (`guid`, `url`, `name`, `added`) VALUES (?guid, ?url, ?name, UNIX_TIMESTAMP());");
                 insert.Add("?guid", guid);

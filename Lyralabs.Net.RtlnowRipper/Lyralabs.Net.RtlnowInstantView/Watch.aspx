@@ -14,7 +14,7 @@
     <script lang="javascript">
       flashembed('player', 'http://releases.flowplayer.org/swf/flowplayer-3.2.8.swf', {
         config: {
-          clip: 'http://btn.lyra.bz/files/<%=HttpUtility.HtmlEncode(Context.Request.QueryString["v"]) %>.flv',
+          clip: 'http://<%=ConfigurationManager.AppSettings["steamerhost"] %>/files/<%=HttpUtility.HtmlEncode(Context.Request.QueryString["v"]) %>.flv',
           plugins: {
             controlbar: null
           }
